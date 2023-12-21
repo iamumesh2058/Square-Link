@@ -1,25 +1,25 @@
 import React from "react";
 
-import { IoBarChartSharp } from 'react-icons/io5';
-import { FaWpforms } from "react-icons/fa";
+import { IoGameControllerSharp } from "react-icons/io5";
+import { FaHistory } from "react-icons/fa";
 import { ImProfile } from 'react-icons/im';
-import { MdAdminPanelSettings } from "react-icons/md";
+import { MdLeaderboard } from "react-icons/md";
 
 const links = [
     {
         text: 'play game',
         path: '.',
-        icon: <FaWpforms />,
+        icon: <IoGameControllerSharp />,
     },
     {
-        text: 'stats',
-        path: 'stats',
-        icon: <MdAdminPanelSettings />,
+        text: 'history',
+        path: 'history',
+        icon: <FaHistory />,
     },
     {
         text: 'leaderboard',
         path: 'leaderboard',
-        icon: <IoBarChartSharp />,
+        icon: <MdLeaderboard />,
     },
     {
         text: 'profile',

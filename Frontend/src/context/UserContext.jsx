@@ -8,7 +8,7 @@ export const UserContext = createContext({
 
 export const UserProvider = ({ children }) => {
     const user = {
-        name: "Umesh"
+        name: ""
     }
     const logoutUser = async () => {
         console.log("Logout User");
