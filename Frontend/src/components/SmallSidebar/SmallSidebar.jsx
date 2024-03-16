@@ -1,12 +1,12 @@
 import React, { useContext } from 'react';
-import { DashboardContext } from '../../context/DashboardContext';
 import Wrapper from './SmallSidebar.style';
 import NavLinks from '../NavLinks/NavLinks';
 import Logo from '../Logo/Logo';
 import { FaTimes } from 'react-icons/fa';
+import { useDashboardContext } from '../../pages/DashboardLayout/DashboardLayout';
 
 const SmallSidebar = () => {
-    const { showSidebar, toggleSidebar } = useContext(DashboardContext);
+    const { showSidebar, toggleSidebar } = useDashboardContext();
     return (
         <Wrapper>
             <div className={showSidebar ? `sidebar-container show-sidebar` : `sidebar-container`}>

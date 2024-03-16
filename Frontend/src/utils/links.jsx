@@ -3,7 +3,7 @@ import React from "react";
 import { IoGameControllerSharp } from "react-icons/io5";
 import { FaHistory } from "react-icons/fa";
 import { ImProfile } from 'react-icons/im';
-import { MdLeaderboard } from "react-icons/md";
+import { IoBarChartSharp } from 'react-icons/io5';
 
 const links = [
     {
@@ -17,9 +17,9 @@ const links = [
         icon: <FaHistory />,
     },
     {
-        text: 'leaderboard',
-        path: 'leaderboard',
-        icon: <MdLeaderboard />,
+        text: 'stats',
+        path: 'stats',
+        icon: <IoBarChartSharp />,
     },
     {
         text: 'profile',

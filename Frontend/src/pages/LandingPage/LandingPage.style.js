@@ -13,7 +13,7 @@ const Wrapper = styled.section`
     min-height: calc(100vh - var(--nav-height));
     display: grid;
     align-items: center;
-    margin-top: -3rem;
+    margin-top: -2rem;
   }
   h1 {
     font-weight: 700;
@@ -23,7 +23,8 @@ const Wrapper = styled.section`
     margin-bottom: 1.5rem;
   }
   p {
-    line-height: 2;
+    line-height: 1.5;
+    text-align: justify;
     color: var(--text-secondary-color);
     margin-bottom: 1.5rem;
     max-width: 35em;

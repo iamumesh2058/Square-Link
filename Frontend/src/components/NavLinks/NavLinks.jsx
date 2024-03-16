@@ -1,10 +1,10 @@
 import React, { useContext } from 'react';
 import links from '../../utils/links';
 import { NavLink } from 'react-router-dom';
-import { DashboardContext } from '../../context/DashboardContext';
+import { useDashboardContext } from '../../pages/DashboardLayout/DashboardLayout';
 
 const NavLinks = ({ isBigSidebar}) => {
-    const { toggleSidebar } = useContext(DashboardContext);
+    const { toggleSidebar } = useDashboardContext();
     return (
         <div className='nav-links'>
             {

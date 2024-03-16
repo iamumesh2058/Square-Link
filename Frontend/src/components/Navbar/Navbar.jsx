@@ -1,14 +1,14 @@
-import React, { useContext } from 'react';
+import React from 'react';
 import Wrapper from './Navbar.style';
 import { FaAlignLeft } from 'react-icons/fa';
 import Logo from '../Logo/Logo';
 import ThemeToggle from '../ThemeToggle/ThemeToggle';
 import LogoutContainer from '../LogoutContainer/LogoutContainer';
-import { DashboardContext } from '../../context/DashboardContext';
+import { useDashboardContext } from '../../pages/DashboardLayout/DashboardLayout';
 
 
 const Navbar = () => {
-    const { showSidebar, toggleSidebar } = useContext(DashboardContext);
+    const { toggleSidebar } = useDashboardContext();
     return (
         <Wrapper>
             <div className="nav-center">
@@ -17,6 +17,7 @@ const Navbar = () => {
                 </button>
                 <div>
                     <Logo />
+                    <h4 className='logo-text'>Dashboard</h4>
                 </div>
                 <div className="btn-container">
                     <ThemeToggle />

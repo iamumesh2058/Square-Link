@@ -12,16 +12,9 @@ const Register = () => {
 
                 <FormRow
                     type="text"
-                    name="firstName"
-                    labelText="First Name"
-                    defaultValue="Umesh"
-                />
-
-                <FormRow
-                    type="text"
-                    name="lastName"
-                    labelText="Last Name"
-                    defaultValue="Gurung"
+                    name="userName"
+                    labelText="User Name"
+                    defaultValue="iamumesh"
                 />
 
                 <FormRow

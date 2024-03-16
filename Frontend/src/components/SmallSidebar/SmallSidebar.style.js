@@ -58,6 +58,12 @@ const Wrapper = styled.aside`
   .nav-link:hover {
     color: var(--primary-500);
   }
+
+  header{
+    .logo{
+      margin-left:-100px;
+    }
+  }
   .icon {
     font-size: 1.5rem;
     margin-right: 1rem;
