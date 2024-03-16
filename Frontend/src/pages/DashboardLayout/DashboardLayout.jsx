@@ -16,7 +16,7 @@ const DashboardLayout = ({ isDarkThemeEnabled }) => {
     const [squares, setSquares] = useState([]);
 
     const user = {
-        'name': "Umesh"
+        'name': "Square Team"
     };
     const navigate = useNavigate();
     const [showSidebar, setShowSidebar] = useState(false);

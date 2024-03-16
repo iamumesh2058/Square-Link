@@ -4,6 +4,7 @@ import { minimax } from "../../square_link_library/Minimax";
 import { handleMouseUp } from '../../square_link_library/HandleMouseUp';
 import { Link } from 'react-router-dom';
 import { toast } from 'react-toastify';
+import Wrapper from './GameRoom.style';
 
 
 const GameRoom = () => {
@@ -18,30 +19,30 @@ const GameRoom = () => {
     const [againstComputer, setAgainstComputer] = useState(true);
 
     useEffect(() => {
-        // console.log(gameLevel);
-        // console.log(rows);
-        // console.log(cols);
+        console.log(gameLevel);
+        console.log(rows);
+        console.log(cols);
         let tempLines = [];
 
-        for (let i = 0; i < rows * cols - 1; i++) {
-            let startRow = Math.floor(i / cols);
-            let startCol = i % cols;
-            let endRow = Math.floor((i + 1) / cols);
-            let endCol = (i + 1) % cols;
-
-            if (startRow < rows && startCol < cols && endRow < rows && endCol < cols && ((startRow === endRow && Math.abs(startCol - endCol) <= 1) || (startCol === endCol && Math.abs(startRow - endRow) <= 1))) {
-                tempLines = [...tempLines, { start: i, end: i + 1 }];
+        // Generate horizontal lines
+        for (let i = 0; i < rows; i++) {
+            for (let j = 0; j < cols - 1; j++) {
+                const start = i * cols + j;
+                const end = start + 1;
+                tempLines.push({ start, end });
             }
-
-            endRow = Math.floor((i + cols) / cols);
-            endCol = (i + cols) % cols;
-
-            if (startRow < rows && startCol < cols && endRow < rows && endCol < cols && ((startRow === endRow && Math.abs(startCol - endCol) <= 1) || (startCol === endCol && Math.abs(startRow - endRow) <= 1))) {
-                tempLines = [...tempLines, { start: i, end: i + cols }];
+        }
+    
+        // Generate vertical lines
+        for (let i = 0; i < rows - 1; i++) {
+            for (let j = 0; j < cols; j++) {
+                const start = i * cols + j;
+                const end = start + cols;
+                tempLines.push({ start, end });
             }
         }
         setAllLines(tempLines);
-        // console.log(tempLines);
+        console.log(tempLines);
 
         let tempCircles = [];
         for (let i = 0; i < rows; i++) {
@@ -56,13 +57,12 @@ const GameRoom = () => {
     // CALLING MINMAX
     useEffect(() => {
         if (player === 1 && againstComputer) {
-
             let remainingLines = allLines.filter(line => !lines.some(item2 => line.start === item2.start && line.end === item2.end));
-
 
             let alpha = { start: null, end: null, score: -999 };
             let beta = { start: null, end: null, score: 999 };
             let searchDepth;
+
             if (gameLevel === 'Easy') searchDepth = 3;
             if (gameLevel === 'Medium') searchDepth = 6;
             if (gameLevel === "Hard") {
@@ -71,76 +71,82 @@ const GameRoom = () => {
                     searchDepth = 17;
                 }
             }
-
-
-            let { start, end, returnscore } = minimax(remainingLines, lines, scores[2], scores[1], true, cols, alpha, beta, searchDepth);
-            setStartIndex(start);
-            handleMouseUp(end, rows, cols, lines, setLines, startIndex, setStartIndex, player, setPlayer, scores, setScores, squares, setSquares);
+            
+            setTimeout(() => {
+                let { start, end, returnscore } = minimax(remainingLines, lines, scores[2], scores[1], true, cols, alpha, beta, searchDepth);
+                setStartIndex(start);
+                handleMouseUp(end, rows, cols, lines, setLines, startIndex, setStartIndex, player, setPlayer, scores, setScores, squares, setSquares);
+            }, 1000);
         }
-        toast.success("Hello")
     }, [player, startIndex, allLines]);
 
     return (
-        <div className="main-content-gameroom">
-            <div className="gamestats">
+        <Wrapper>
+            <div className="main-content-gameroom">
+                <div className="gamestats">
 
-                <div className="players-list">
-                    <h3>Players:</h3>
-                    <ol type='1'>
-                        <li>Computer: {scores[1]}</li>
-                        {/* <li>{playerName ? playerName : "Human Player"}: {scores[2]}</li> */}
-                        <li>Human Player: {scores[2]}</li>
-                        <div>Current Player: {player === 1 ? "Computer" : "Player"}</div>
-                    </ol>
+                    <div className="players-list">
+                        <h4>Players:</h4>
+                        <ol type='1'>
+                            <li>Computer: {scores[1]}</li>
+                            {/* <li>{playerName ? playerName : "Human Player"}: {scores[2]}</li> */}
+                            <li>Human Player: {scores[2]}</li>
+                        </ol>
+                    </div>
+
+                    <div className="invite-link">
+                        <Link to="/dashboard" className="btn btn-form">End!</Link>
+                    </div>
                 </div>
 
-                <div className="invite-link">
-                    <Link to="/" className="end">End!</Link>
+                <div className="gameboard-container">
+                    <h5>{player === 1 ? "Computer" : "Player"}s' Turn</h5>
+                    <div className="gameboard">
+                        <svg width="800" height="500">
+
+                            {circles.map((circle, index) => (
+                                <circle
+                                    cx={circle.cx}
+                                    cy={circle.cy}
+                                    r={15}
+                                    fill='var(--primary-500)'
+                                    stroke="var(--text-color)"
+                                    onMouseDown={() => setStartIndex(index)}
+                                    onMouseUp={(e) => handleMouseUp(index, rows, cols, lines, setLines, startIndex, setStartIndex, player, setPlayer, scores, setScores, squares, setSquares)}
+                                    key={index}
+                                />
+                            ))}
+
+                            {lines.map((line, index) => (
+                                <line
+                                    x1={circles[line.start].cx}
+                                    y1={circles[line.start].cy}
+                                    x2={circles[line.end].cx}
+                                    y2={circles[line.end].cy}
+                                    stroke="var(--text-color)"
+                                    key={index}
+                                />
+                            ))}
+
+                            {squares.map((square, index) => (
+                                <text
+                                    key={index}
+                                    x={circles[square.start].cx + 36}
+                                    y={circles[square.start].cy + 36}
+                                    fontSize="20"
+                                    fill="var(--text-color)"
+                                    textAnchor="middle"
+                                    dominantBaseline="central"
+                                >
+                                    {square.player}
+                                </text>
+                            ))}
+
+                        </svg>
+                    </div>
                 </div>
             </div>
-
-            <div className="gameboard">
-                <svg width="800" height="400">
-                    {circles.map((circle, index) => (
-                        <circle
-                            cx={circle.cx}
-                            cy={circle.cy}
-                            r={20}
-                            fill='var(--primary-500)'
-                            stroke="var(--text-color)"
-                            onMouseDown={() => setStartIndex(index)}
-                            onMouseUp={(e) => handleMouseUp(index, rows, cols, lines, setLines, startIndex, setStartIndex, player, setPlayer, scores, setScores, squares, setSquares)}
-                            key={index}
-                        />
-                    ))}
-
-                    {lines.map((line, index) => (
-                        <line
-                            x1={circles[line.start].cx}
-                            y1={circles[line.start].cy}
-                            x2={circles[line.end].cx}
-                            y2={circles[line.end].cy}
-                            stroke="var(--text-color)"
-                            key={index}
-                        />
-                    ))}
-                    {squares.map((square, index) => (
-                        <text
-                            key={index}
-                            x={circles[square.start].cx + 25}
-                            y={circles[square.start].cy + 25}
-                            fontSize="20"
-                            fill="var(--text-color)"
-                            textAnchor="middle"
-                            dominantBaseline="central"
-                        >
-                            {square.player}
-                        </text>
-
-                    ))}
-                </svg>
-            </div>
-        </div>
+        </Wrapper>
     )
 }
 

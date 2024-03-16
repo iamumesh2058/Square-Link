@@ -15,25 +15,27 @@ const PlayGame = () => {
 
     return (
         <Wrapper>
-            <FormRowSelect
-                labelText='Rows'
-                name="rows"
-                list={[4, 5, 6]}
-                defaultValue={rows.toString}
-                onChange={(e) => {
-                    setRows(e.target.value);
-                }}
-            />
+            <div className="matrix">
+                <FormRowSelect
+                    labelText='Rows'
+                    name="rows"
+                    list={[4, 5, 6]}
+                    defaultValue={rows.toString}
+                    onChange={(e) => {
+                        setRows(e.target.value);
+                    }}
+                />
 
-            <FormRowSelect
-                labelText='Columns'
-                name="cols"
-                list={[4, 5, 6, 7, 8, 9, 10]}
-                defaultValue={cols.toString()}
-                onChange={(e) => {
-                    setCols(e.target.value)
-                }}
-            />
+                <FormRowSelect
+                    labelText='Columns'
+                    name="cols"
+                    list={[4, 5, 6, 7, 8, 9, 10]}
+                    defaultValue={cols.toString()}
+                    onChange={(e) => {
+                        setCols(e.target.value)
+                    }}
+                />
+            </div>
 
             <FormRowSelect
                 labelText="Game Mode"
@@ -61,7 +63,7 @@ const PlayGame = () => {
             {
 
                 <div>
-                    <Link to="/dashboard/gameroom" className='btn btn-block form-btn'>Play!</Link>
+                    <Link to="/dashboard/gameroom" className='btn btn-block form-btn'>Play Game!</Link>
                 </div>
             }
         </Wrapper>
