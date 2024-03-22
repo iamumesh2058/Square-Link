@@ -1,9 +1,26 @@
-import React from 'react'
+import React from 'react';
+import customFetch from "../../utils/customFetch";
+import { useLoaderData } from 'react-router-dom';
+import { ChartsContainer, StatsContainer } from '../../components';
 
-const Stats = () => {
-  return (
-    <h1>Stats</h1>
-  )
+export const loader = async () => {
+	const response = await customFetch.get('/history/stats');
+	return response.data;
 }
 
-export default Stats
+const Stats = () => {
+	const data = useLoaderData();
+	const { defaultStats, weeklyGames } = data;
+	console.log(weeklyGames);
+	return (
+		<>
+			<StatsContainer defaultStats={defaultStats} />
+			{
+				weeklyGames?.length > 0 &&
+				<ChartsContainer data={weeklyGames} />
+			}
+		</>
+	)
+}
+
+export default Stats;

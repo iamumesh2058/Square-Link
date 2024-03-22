@@ -5,6 +5,7 @@ import img from '../../assets/images/not-found.svg';
 
 const Error = () => {
     const error = useRouteError();
+    console.log(error);
     return (
         <>
             {
@@ -15,6 +16,7 @@ const Error = () => {
                             <h3>Ohh! page not found</h3>
                             <p>We can't seem to find the page you are looking for</p>
                             <Link to={'/dashboard'}>Back to home</Link>
+                            {/* <Link to={'/'}>Back to home</Link> */}
                         </div>
                     </Wrapper>
                     :

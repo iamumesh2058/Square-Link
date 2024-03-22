@@ -6,6 +6,8 @@ export { default as Login } from './Authentication/Login';
 export { default as History } from './History/History';
 export { default as PlayGame } from './PlayGame/PlayGame';
 export { default as GameRoom } from './GameRoom/GameRoom';
+export { default as GameLobby } from './GameLobby/GameLobby';
+export { default as GameRoomMultiplayer } from './GameRoomMultiplayer/GameRoomMultiplayer';
 export { default as Profile } from './Profile/Profile';
 export { default as Stats } from './Stats/Stats';
 export { default as Error } from './Error/Error';

@@ -4,37 +4,40 @@ import * as dotenv from 'dotenv';
 dotenv.config();
 import morgan from "morgan";
 import mongoose from "mongoose";
+import cors from "cors";
+import http from "http";
 import { Server } from "socket.io";
-import http from 'http';
-import cors from 'cors';
+import cookieParser from "cookie-parser";
+
 
 // INITIALIZING APP
 const app = express();
-app.use(cors);
-const server = http.createServer(app);
-const io = new Server(server, {
-    cors: {
-        origin: "https://square-link.onrender.com"
-    }
-})
 
 
 // ROUTES
 import authRoutes from "./routes/authRoutes.js";
+import userRoutes from "./routes/userRoutes.js";
+import historyRoutes from './routes/historyRoutes.js';
+
 
 
 // MIDDLEWARE
 import errorHandlerMiddleware from './middleware/errorHandlerMiddleware.js';
+import { authenticateUser } from "./middleware/authMiddleware.js";
+
 
 if (process.env.NODE_ENV === 'developemnt') {
     app.use(morgan("dev"));
 }
 
-
+app.use('/public/uploads', express.static('public/uploads'));
+app.use(cookieParser());
 app.use(express.json());
 
 
 // USING ROUTES
+app.use("/api/user", authenticateUser, userRoutes);
+app.use("/api/history", authenticateUser, historyRoutes);
 app.use("/api/auth", authRoutes);
 
 
@@ -46,11 +49,13 @@ app.use(errorHandlerMiddleware);
 
 
 // STARTING SERVER
+const server = http.createServer(app);
+app.use(cors);
 const PORT = process.env.PORT || 5000;
 mongoose.connect(process.env.MONGODB_URL)
     .then(() => {
         console.log("Database connected successfully");
-        app.listen(PORT, () => {
+        server.listen(PORT, () => {
             console.log("Server running : ", PORT);
         });
     })
@@ -59,11 +64,19 @@ mongoose.connect(process.env.MONGODB_URL)
     });
 
 
+
+const io = new Server(server, {
+    cors: {
+        origin: "http://localhost:5173"
+    }
+});
+
 const lobbies = {};
 
 io.on('connection', (socket) => {
     console.log("New client connected: ", socket.id);
 
+    // Handle lobby creation
     socket.on('createLobby', (rows, cols) => {
         if (!lobbies[socket.id]) {
             lobbies[socket.id] = {
@@ -73,7 +86,7 @@ io.on('connection', (socket) => {
                 gameStarted: false,
                 playerTurn: [],
                 players: [],
-                availableColors: ["blue", "green", "red", "black"],
+                availableColors: ["blue", "green", "red", "cyan"],
                 lines: [],
                 squares: [],
             };
@@ -88,7 +101,8 @@ io.on('connection', (socket) => {
     // Handle lobby joining
     socket.on('joinLobby', (lobbyId, playerName) => {
         console.log(`${playerName} wants to join "${lobbyId}"`);
-        if (lobbies[lobbyId]) {
+        console.log(lobbies[lobbyId]);
+        if (lobbies[lobbyId] !== undefined) {
             if (!lobbies[lobbyId].gameStarted) {
                 console.log("The length of colors: ", lobbies[lobbyId].availableColors.length);
                 if (!lobbies[lobbyId].players.some(obj => obj.playerId === socket.id)) {
@@ -110,16 +124,16 @@ io.on('connection', (socket) => {
                         socket.emit("lobbyJoined", playerId, playerColor);
                         io.to(lobbyId).emit('lobbyUpdated', lobbies[lobbyId]);
                     } else {
-                        socket.emit("lobbyJoinedFail", { errorCode: 4, error: "There are already four players in the lobby. You cannot enter." });
+                        socket.emit("lobbyJoinedFail", { error: "There are already four players in the lobby. You cannot enter." });
                     }
                 } else {
-                    socket.emit("lobbyJoinedFail", { errorCode: 3, error: "You've already entered the lobby" });
+                    socket.emit("lobbyJoinedFail", { error: "You've already entered the lobby" });
                 }
             } else {
-                socket.emit("lobbyJoinedFail", { errorCode: 2, error: "Game has already started. You cannot enter." });
+                socket.emit("lobbyJoinedFail", { error: "Game has already started. You cannot enter." });
             }
         } else {
-            socket.emit('lobbyJoinedFail', { errorCode: 1, error: "This lobby doesn't exist right now. You cannot enter." });
+            socket.emit('lobbyJoinedFail', { error: "This lobby doesn't exist right now. You cannot enter." });
         }
     });
 

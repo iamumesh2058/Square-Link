@@ -5,12 +5,15 @@ import { useDashboardContext } from '../../pages/DashboardLayout/DashboardLayout
 
 const LogoutContainer = () => {
     const [showLogout, setShowLogout] = useState(false);
-    const { user, logoutUser} = useDashboardContext();
+    const { user, logoutUser } = useDashboardContext();
     return (
         <Wrapper>
             <button type='button' className='btn logout-btn' onClick={() => setShowLogout(!showLogout)}>
-                <FaUserCircle />
-                {user.name}
+                {user.avatar ?
+                    <img src={`http://localhost:8000/${user.avatar}`} alt='avatar' className='img' /> :
+                    <FaUserCircle />
+                }
+                {user.username}
                 <FaCaretDown />
             </button>
             <div className={showLogout ? 'dropdown show-dropdown' : 'dropdown'}>

@@ -25,8 +25,8 @@ const Wrapper = styled.section`
   .gameboard-container{
 
     h5{
+        margin-top: 1rem;
         margin-bottom: 1rem;
-        margin-left: 3rem;
     }
   }
 
@@ -35,6 +35,14 @@ const Wrapper = styled.section`
     .main-content-gameroom {
       grid-template-columns: 1fr 3fr;
       justify-content: center;
+    }
+
+    .gameboard-container{
+
+      h5{
+        margin-bottom: 1rem;
+        margin-left: 3rem;
+      }
     }
   }
 `;

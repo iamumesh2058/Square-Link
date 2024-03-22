@@ -80,7 +80,6 @@ export const minimax = memoize(function (remainingLines, simulatedLines, humanSc
                 humanScore += tempscore;
             }
         }
-
         return { start: remainingLines[0].start, end: remainingLines[0].end, score: computerScore - humanScore };
     }
 

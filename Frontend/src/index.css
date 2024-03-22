@@ -343,17 +343,14 @@ button:disabled {
 }
 
 /* BUTTONS AND BADGES */
-.pending {
-    background: #fef3c7;
-    color: #f59e0b;
+.Draw {
+    background: #9c883a;
 }
 
-.interview {
-    background: #e0e8f9;
-    color: #647acb;
+.Win {
+    background: #066146;
 }
 
-.declined {
-    background: #ffeeee;
-    color: #d66a6a;
+.Lose {
+    background: #ac4d4d;
 }

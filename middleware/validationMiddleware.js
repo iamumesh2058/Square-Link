@@ -52,7 +52,7 @@ export const validateRegisterInput = withValidationError([
 export const validateLoginInput = withValidationError([
     body('email')
         .notEmpty()
-        .withMessage('email is required')
+        .withMessage('Email is required')
         .isEmail().withMessage("Invalid email format")
         .custom(async (email) => {
             const user = await User.findOne({ email });
@@ -63,4 +63,20 @@ export const validateLoginInput = withValidationError([
     body('password')
         .notEmpty()
         .withMessage('password is required')
-])
+]);
+
+
+export const validateUpdateUser = withValidationError([
+    body('username').notEmpty().withMessage('username is required'),
+    body('email')
+        .notEmpty()
+        .withMessage('email is required')
+        .isEmail()
+        .withMessage("Invalid email format").
+        custom(async (email, { req }) => {
+            const user = await User.findOne({ email });
+            if (user && user._id.toString() !== req.user.userId) {
+                throw new BadRequestError('email already exists');
+            }
+        }),
+]);

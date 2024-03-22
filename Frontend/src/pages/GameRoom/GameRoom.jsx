@@ -2,13 +2,20 @@ import React, { useEffect, useState } from 'react';
 import { useDashboardContext } from '../DashboardLayout/DashboardLayout';
 import { minimax } from "../../square_link_library/Minimax";
 import { handleMouseUp } from '../../square_link_library/HandleMouseUp';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import Wrapper from './GameRoom.style';
+import customFetch from '../../utils/customFetch';
+
+const addHistory = async (data) => {
+    await customFetch.post("/history/createHistory", data);
+}
 
 
 const GameRoom = () => {
-    const { rows, cols, gameLevel } = useDashboardContext();
+    const navigate = useNavigate();
+
+    const { rows, cols, gameLevel, user } = useDashboardContext();
     const [allLines, setAllLines] = useState([]);
     const [circles, setCircles] = useState([]);
     const [lines, setLines] = useState([]);
@@ -18,10 +25,12 @@ const GameRoom = () => {
     const [squares, setSquares] = useState([]);
     const [againstComputer, setAgainstComputer] = useState(true);
 
+    const [totalSquares, setTotalSquares] = useState((rows - 1) * (cols - 1));
+
     useEffect(() => {
-        console.log(gameLevel);
-        console.log(rows);
-        console.log(cols);
+        // console.log(gameLevel);
+        // console.log(rows);
+        // console.log(cols);
         let tempLines = [];
 
         // Generate horizontal lines
@@ -32,7 +41,7 @@ const GameRoom = () => {
                 tempLines.push({ start, end });
             }
         }
-    
+
         // Generate vertical lines
         for (let i = 0; i < rows - 1; i++) {
             for (let j = 0; j < cols; j++) {
@@ -42,7 +51,7 @@ const GameRoom = () => {
             }
         }
         setAllLines(tempLines);
-        console.log(tempLines);
+        // console.log(tempLines);
 
         let tempCircles = [];
         for (let i = 0; i < rows; i++) {
@@ -71,12 +80,48 @@ const GameRoom = () => {
                     searchDepth = 17;
                 }
             }
-            
+
             setTimeout(() => {
                 let { start, end, returnscore } = minimax(remainingLines, lines, scores[2], scores[1], true, cols, alpha, beta, searchDepth);
                 setStartIndex(start);
                 handleMouseUp(end, rows, cols, lines, setLines, startIndex, setStartIndex, player, setPlayer, scores, setScores, squares, setSquares);
             }, 1000);
+        }
+        if (squares.length === totalSquares) {
+            if (scores[2] > scores[1]) {
+                const data = {
+                    gameStatus: "Win",
+                    myScore: scores[2],
+                    opponentScore: scores[1],
+                    opponent: "Computer",
+                    gameLevel: gameLevel
+                }
+                addHistory(data)
+                toast.success("You won");
+            }
+            else if (scores[2] === scores[1]) {
+                const data = {
+                    gameStatus: "Draw",
+                    myScore: scores[2],
+                    opponentScore: scores[1],
+                    opponent: "Computer",
+                    gameLevel: gameLevel
+                }
+                addHistory(data)
+                toast.warning("Draw");
+            }
+            else {
+                const data = {
+                    gameStatus: "Lose",
+                    myScore: scores[2],
+                    opponentScore: scores[1],
+                    opponent: "Computer",
+                    gameLevel: gameLevel
+                }
+                addHistory(data)
+                toast.error("You lost");
+            }
+            navigate("/dashboard");
         }
     }, [player, startIndex, allLines]);
 
@@ -89,8 +134,7 @@ const GameRoom = () => {
                         <h4>Players:</h4>
                         <ol type='1'>
                             <li>Computer: {scores[1]}</li>
-                            {/* <li>{playerName ? playerName : "Human Player"}: {scores[2]}</li> */}
-                            <li>Human Player: {scores[2]}</li>
+                            <li>{user.username}: {scores[2]}</li>
                         </ol>
                     </div>
 
@@ -100,7 +144,7 @@ const GameRoom = () => {
                 </div>
 
                 <div className="gameboard-container">
-                    <h5>{player === 1 ? "Computer" : "Player"}s' Turn</h5>
+                    <h5>{player === 1 ? "Computer" : `${user.username}`}'s Turn</h5>
                     <div className="gameboard">
                         <svg width="800" height="500">
 
