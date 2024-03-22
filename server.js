@@ -8,6 +8,7 @@ import cors from "cors";
 import http from "http";
 import { Server } from "socket.io";
 import cookieParser from "cookie-parser";
+import cloudinary from 'cloudinary';
 
 
 // INITIALIZING APP
@@ -20,17 +21,30 @@ import userRoutes from "./routes/userRoutes.js";
 import historyRoutes from './routes/historyRoutes.js';
 
 
+// public
+import { dirname } from 'path';
+import { fileURLToPath } from "url";
+import path from "path";
+
 
 // MIDDLEWARE
 import errorHandlerMiddleware from './middleware/errorHandlerMiddleware.js';
 import { authenticateUser } from "./middleware/authMiddleware.js";
 
+cloudinary.config({
+    cloud_name: process.env.CLOUD_NAME,
+    api_key: process.env.CLOUD_API_KEY,
+    api_secret: process.env.CLOUD_API_SECRET,
+});
+
+const __dirname = dirname(fileURLToPath(import.meta.url));
 
 if (process.env.NODE_ENV === 'developemnt') {
     app.use(morgan("dev"));
 }
 
-app.use('/public/uploads', express.static('public/uploads'));
+// app.use('/public/uploads', express.static('public/uploads'));
+app.use(express.static(path.resolve(__dirname, './Frontend/dist')));
 app.use(cookieParser());
 app.use(express.json());
 

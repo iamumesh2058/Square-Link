@@ -10,7 +10,7 @@ const LogoutContainer = () => {
         <Wrapper>
             <button type='button' className='btn logout-btn' onClick={() => setShowLogout(!showLogout)}>
                 {user.avatar ?
-                    <img src={`http://localhost:8000/${user.avatar}`} alt='avatar' className='img' /> :
+                    <img src={user.avatar} alt='avatar' className='img' /> :
                     <FaUserCircle />
                 }
                 {user.username}
