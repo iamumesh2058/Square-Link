@@ -7,7 +7,8 @@ import customFetch from '../../utils/customFetch';
 import { toast } from 'react-toastify';
 
 
-const socket = io.connect("http://localhost:8000");
+// const socket = io.connect("http://localhost:8000");
+const socket = io.connect("http://localhost:1000");
 
 export const loader = async () => {
     try {
