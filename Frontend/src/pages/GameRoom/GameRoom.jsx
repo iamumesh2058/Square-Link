@@ -15,17 +15,30 @@ const addHistory = async (data) => {
 const GameRoom = () => {
     const navigate = useNavigate();
 
-    const { rows, cols, gameLevel, user } = useDashboardContext();
+    const gameBoard = localStorage.getItem("gameBoard");
+    const parsedGameBoard = JSON.parse(gameBoard);
+    const rows = parsedGameBoard.rows;
+    const cols = parsedGameBoard.cols;
+    const gameLevel = parsedGameBoard.gameLevel;
+
+    const { user } = useDashboardContext();
     const [allLines, setAllLines] = useState([]);
     const [circles, setCircles] = useState([]);
+
     const [lines, setLines] = useState([]);
     const [startIndex, setStartIndex] = useState(null);
     const [player, setPlayer] = useState(1);
     const [scores, setScores] = useState({ 1: 0, 2: 0 });
     const [squares, setSquares] = useState([]);
     const [againstComputer, setAgainstComputer] = useState(true);
-
     const [totalSquares, setTotalSquares] = useState((rows - 1) * (cols - 1));
+
+
+    useEffect(() => {
+        if(gameLevel===''){
+            navigate("/dashboard");
+        }
+    }, [gameLevel])
 
     useEffect(() => {
         // console.log(gameLevel);
@@ -85,7 +98,7 @@ const GameRoom = () => {
                 let { start, end, returnscore } = minimax(remainingLines, lines, scores[2], scores[1], true, cols, alpha, beta, searchDepth);
                 setStartIndex(start);
                 handleMouseUp(end, rows, cols, lines, setLines, startIndex, setStartIndex, player, setPlayer, scores, setScores, squares, setSquares);
-            }, 1000);
+            }, 500);
         }
         if (squares.length === totalSquares) {
             if (scores[2] > scores[1]) {
@@ -139,7 +152,7 @@ const GameRoom = () => {
                     </div>
 
                     <div className="invite-link">
-                        <Link to="/dashboard" className="btn btn-form">End!</Link>
+                        <Link to="/dashboard" reloadDocument className="btn btn-form">End!</Link>
                     </div>
                 </div>
 

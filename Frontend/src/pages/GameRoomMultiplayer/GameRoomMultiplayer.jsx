@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import { useDashboardContext } from '../DashboardLayout/DashboardLayout';
 import Wrapper from './GameRoomMultiplayer.style';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { handleMouseUp } from '../../square_link_library/HandleMouseUpMultiplayer';
 
 const GameRoomMultiplayer = () => {
+    const navigate = useNavigate();
     const {
         myLobby, setMyLobby,
         lobbyId,
@@ -43,7 +44,7 @@ const GameRoomMultiplayer = () => {
 
     useEffect(() => {
         if (lines.length === ((row * (col - 1)) + (col * (row - 1)))) {
-            navigate("/end");
+            navigate("/dashboard/end");
         }
     }, [lines]);
 
@@ -126,8 +127,8 @@ const GameRoomMultiplayer = () => {
                         {squares.map((square, index) => (
                             <text
                                 key={index}
-                                x={circles[square.start].cx + 25}
-                                y={circles[square.start].cy + 25}
+                                x={circles[square.start].cx + 36}
+                                y={circles[square.start].cy + 36}
                                 fontSize="20"
                                 fill={square.color}
                                 textAnchor="middle"

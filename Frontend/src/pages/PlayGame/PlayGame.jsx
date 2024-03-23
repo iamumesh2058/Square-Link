@@ -11,12 +11,27 @@ const PlayGame = () => {
         socket,
         lobbyId, setLobbyId,
         playerName,
-        error,
+        error, setError,
         rows, setRows,
         cols, setCols,
         gameLevel, setGameLevel,
         gameMode, setGameMode,
     } = useDashboardContext();
+
+    useEffect(() => {
+        localStorage.removeItem('gameBoard');
+    }, []);
+
+    const handlePlayButton = () => {
+        const gameBoard = {
+            rows: rows,
+            cols: cols,
+            gameLevel: gameLevel
+        };
+        localStorage.setItem('gameBoard', JSON.stringify(gameBoard));
+        toast.success("Game started");
+        navigate("/dashboard/gameroom");
+    }
 
 
     const handleLobbyCreation = () => {
@@ -33,11 +48,12 @@ const PlayGame = () => {
     const handleLobbyJoin = () => {
         if (lobbyId) {
             socket.emit("joinLobby", lobbyId, playerName);
-            if(error){
-                toast.error(error);
-                navigate("/dashboard");
-            }
         }
+        socket.on("lobbyJoinedFail", ({ error }) => {
+            setError(error);
+            toast.error(error);
+            navigate('/dashboard/playgame');
+        });
         toast.success("Lobby Joined");
         navigate('/dashboard/gamelobby/enter');
     }
@@ -130,11 +146,14 @@ const PlayGame = () => {
 
             {
                 gameMode === "Vs Computer" &&
-                <Link to="/dashboard/gameroom">
-                    <button className='btn btn-block form-btn'>
-                        Play!
-                    </button>
-                </Link>
+                <button className='btn btn-block form-btn' onClick={handlePlayButton}>
+                    Play!
+                </button>
+                // <Link to="/dashboard/gameroom">
+                //     <button className='btn btn-block form-btn'>
+                //         Play!
+                //     </button>
+                // </Link>
             }
 
             {

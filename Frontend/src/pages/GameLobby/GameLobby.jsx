@@ -17,6 +17,9 @@ const GameLobby = () => {
 
     const path = useParams();
     useEffect(() => {
+        if(lobbyId === null || lobbyCode === ''){
+            navigate("/dashboard");
+        }
         if (path.any === 'create') {
             socket.emit("joinLobby", lobbyId, playerName);
         }

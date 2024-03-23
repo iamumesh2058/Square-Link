@@ -14,7 +14,8 @@ import {
 	Stats,
 	GameRoom,
 	GameRoomMultiplayer,
-	GameLobby
+	GameLobby,
+	EndRoom
 } from './pages';
 
 import { action as registerAction } from './pages/Authentication/Register';
@@ -23,6 +24,7 @@ import { loader as dashboardLoader } from './pages/DashboardLayout/DashboardLayo
 import { action as profileAction } from './pages/Profile/Profile';
 import { loader as historyLoader } from './pages/History/History';
 import { loader as statsLoader } from './pages/Stats/Stats';
+// import { loader as endroomLoader } from './pages/EndRoom/EndRoom';
 
 
 const checkDefaultTheme = () => {
@@ -74,6 +76,11 @@ const router = createBrowserRouter([
 					{
 						path: 'gameroom-multiplayer',
 						element: <GameRoomMultiplayer />
+					},
+					{
+						path: 'end',
+						element: <EndRoom />,
+						// loader: endroomLoader
 					},
 					{
 						path: 'history',
