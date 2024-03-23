@@ -9,39 +9,37 @@ const EndRoom = () => {
     const { myLobby, lobbyId, socket, playerId } = useDashboardContext();
     const [winner, setWinner] = useState('');
 
+    const findWinner = () => {
+        const winner = myLobby.players.reduce((acc, cur) => {
+            return cur.playerScore > acc.playerScore ? cur : acc;
+        });
+        return winner.playerName;
+    }
+
     useEffect(() => {
         if (!lobbyId || myLobby === null) {
             navigate("/dashboard");
             return
         }
 
-        setTimeout(() => {
-            socket.disconnect();
-        }, 10000);
-
         if (myLobby && myLobby.players.lenght > 0) {
             const winner = findWinner();
             setWinner(winner);
         }
 
+        setTimeout(() => {
+            socket.disconnect();
+        }, 10000);
+
+
     }, [lobbyId, myLobby, socket]);
-
-    const findWinner = () => {
-        const winner = myLobby.players.reduce((acc, cur) => {
-            return cur.playerScore > acc.playerScore ? cur : acc;
-        });
-        console.log(winner.playerName);
-        return winner.playerName;
-    }
-
-
 
     return (
         <Wrapper>
             <div className="gamestats">
                 {myLobby &&
                     <div className="players-list">
-                        <h3>Winner is: {winner.playerName}</h3>
+                        <h3>Winner is: {winner}</h3>
                         <h5>Players:</h5>
                         <ol type='a' className="players-list">
                             {myLobby.players.map((player) => {
