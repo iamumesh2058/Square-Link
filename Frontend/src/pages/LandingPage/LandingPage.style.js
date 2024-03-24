@@ -38,6 +38,15 @@ const Wrapper = styled.section`
   .btn {
     padding: 0.75rem 1rem;
   }
+
+  .learn-link{
+    color: var(--primary-500);
+    text-decoration: underline;
+  }
+
+  .learn-link:hover{
+    color: var(--primary-700);  
+  }
   @media (min-width: 992px) {
     .page {
       grid-template-columns: 1fr 400px;

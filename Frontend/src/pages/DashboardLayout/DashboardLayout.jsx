@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useState } from 'react';
+import React, { createContext, useContext, useEffect, useState } from 'react';
 import Wrapper from './DashboardLayout.style';
 import { BigSidebar, Navbar, SmallSidebar } from '../../components';
 import { Outlet, redirect, useLoaderData, useNavigate } from 'react-router-dom';
@@ -7,8 +7,8 @@ import customFetch from '../../utils/customFetch';
 import { toast } from 'react-toastify';
 
 
-// const socket = io.connect("http://localhost:8000");
-const socket = io.connect("http://localhost:1000");
+const socket = io.connect("http://localhost:8000");
+// const socket = io.connect("http://localhost:6000");
 
 export const loader = async () => {
     try {
@@ -22,7 +22,7 @@ export const loader = async () => {
 const DashboardContext = createContext();
 const DashboardLayout = ({ isDarkThemeEnabled }) => {
     const navigate = useNavigate();
-    const {data} = useLoaderData();
+    const { data } = useLoaderData();
     const user = data.user;
 
     const [lobbyId, setLobbyId] = useState("");
@@ -73,9 +73,11 @@ const DashboardLayout = ({ isDarkThemeEnabled }) => {
     });
 
 
-    socket.on("lobbyJoinedFail", ({ error }) => {
-        setError(error);
-    });
+    // socket.on("lobbyJoinedFail", ({ error }) => {
+    //     setError(error);
+    //     navigate("/dashboard");
+    //     return;
+    // });
 
     socket.on("gameStarted", () => {
         setMyLobby({

@@ -41,9 +41,6 @@ const GameRoom = () => {
     }, [gameLevel])
 
     useEffect(() => {
-        // console.log(gameLevel);
-        // console.log(rows);
-        // console.log(cols);
         let tempLines = [];
 
         // Generate horizontal lines
@@ -64,7 +61,6 @@ const GameRoom = () => {
             }
         }
         setAllLines(tempLines);
-        // console.log(tempLines);
 
         let tempCircles = [];
         for (let i = 0; i < rows; i++) {
@@ -73,7 +69,6 @@ const GameRoom = () => {
             }
         }
         setCircles(tempCircles);
-        // console.log(tempCircles);
     }, [rows, cols]);
 
     // CALLING MINMAX
@@ -100,6 +95,8 @@ const GameRoom = () => {
                 handleMouseUp(end, rows, cols, lines, setLines, startIndex, setStartIndex, player, setPlayer, scores, setScores, squares, setSquares);
             }, 500);
         }
+        
+        // updating history
         if (squares.length === totalSquares) {
             if (scores[2] > scores[1]) {
                 const data = {

@@ -8,6 +8,7 @@ export { default as GameRoom } from './GameRoom/GameRoom';
 export { default as GameLobby } from './GameLobby/GameLobby';
 export { default as GameRoomMultiplayer } from './GameRoomMultiplayer/GameRoomMultiplayer';
 export { default as EndRoom } from './EndRoom/EndRoom';
+export { default as HowToPlay } from './HowToPlay/HowToPlay';
 export { default as History } from './History/History';
 export { default as Stats } from './Stats/Stats';
 export { default as Profile } from './Profile/Profile';

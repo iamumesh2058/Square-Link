@@ -11,7 +11,6 @@ export const loader = async () => {
 const Stats = () => {
 	const data = useLoaderData();
 	const { defaultStats, weeklyGames } = data;
-	console.log(weeklyGames);
 	return (
 		<>
 			<StatsContainer defaultStats={defaultStats} />

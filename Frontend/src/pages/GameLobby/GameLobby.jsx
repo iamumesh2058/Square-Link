@@ -1,28 +1,32 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link, useNavigate, useParams } from 'react-router-dom';
 import Wrapper from './GameLobby.style';
 import { useDashboardContext } from '../DashboardLayout/DashboardLayout';
+import { toast } from 'react-toastify';
 
 const GameLobby = () => {
     const navigate = useNavigate();
 
     const {
-        myLobby, setMyLobby,
+        myLobby,
         lobbyId,
         socket,
         playerName
     } = useDashboardContext();
 
+    
     const lobbyCode = `${lobbyId}`;
-
+    
     const path = useParams();
     useEffect(() => {
-        if(lobbyId === null || lobbyCode === ''){
-            navigate("/dashboard");
-        }
+        // if(!lobbyId || lobbyCode === ''){
+        //     navigate("/dashboard");
+        //     return;
+        // }
         if (path.any === 'create') {
             socket.emit("joinLobby", lobbyId, playerName);
         }
+
     }, [lobbyId]);
     
     const handleCopy = (event) => {
@@ -48,7 +52,7 @@ const GameLobby = () => {
                                 key={player.playerId}
                                 style={{ color: player.playerColor }}
                             >
-                                {player.playerName}:{player.playerScore}
+                                {player.playerName}
                             </li>
                         )
                     })

@@ -7,14 +7,7 @@ import { Link, redirect, useNavigate } from 'react-router-dom';
 const EndRoom = () => {
     const navigate = useNavigate();
     const { myLobby, lobbyId, socket, playerId } = useDashboardContext();
-    const [winner, setWinner] = useState('');
-
-    const findWinner = () => {
-        const winner = myLobby.players.reduce((acc, cur) => {
-            return cur.playerScore > acc.playerScore ? cur : acc;
-        });
-        return winner.playerName;
-    }
+    const winner = localStorage.getItem('Winner');
 
     useEffect(() => {
         if (!lobbyId || myLobby === null) {
@@ -22,17 +15,10 @@ const EndRoom = () => {
             return
         }
 
-        if (myLobby && myLobby.players.lenght > 0) {
-            const winner = findWinner();
-            setWinner(winner);
-        }
-
         setTimeout(() => {
             socket.disconnect();
         }, 10000);
-
-
-    }, [lobbyId, myLobby, socket]);
+    }, [lobbyId]);
 
     return (
         <Wrapper>

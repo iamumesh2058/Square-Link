@@ -3,10 +3,17 @@ import { useDashboardContext } from '../DashboardLayout/DashboardLayout';
 import Wrapper from './GameRoomMultiplayer.style';
 import { Link, useNavigate } from 'react-router-dom';
 import { handleMouseUp } from '../../square_link_library/HandleMouseUpMultiplayer';
+import customFetch from '../../utils/customFetch';
+import { toast } from 'react-toastify';
+
+const addHistory = async (data) => {
+    await customFetch .post("/history/createHistory", data);
+}
 
 const GameRoomMultiplayer = () => {
     const navigate = useNavigate();
     const {
+        user,
         myLobby, setMyLobby,
         lobbyId,
         socket,
@@ -23,12 +30,16 @@ const GameRoomMultiplayer = () => {
 
 
     useEffect(() => {
-
-        if (!lobbyId) {
+        if (!lobbyId || myLobby === null) {
             navigate("/dashboard");
+            return
         }
+    }, [lobbyId]);
 
 
+    useEffect(() => {
+        toast.success("Game Started");
+        localStorage.removeItem('Winner');
         let tempCircles = [];
         for (let i = 0; i < row; i++) {
             for (let j = 0; j < col; j++) {
@@ -42,8 +53,58 @@ const GameRoomMultiplayer = () => {
         }
     }, [row, col]);
 
+
     useEffect(() => {
         if (lines.length === ((row * (col - 1)) + (col * (row - 1)))) {
+            const data = {
+                gameStatus: "",
+                myScore: 0,
+                opponentScore: 0,
+                opponent: "",
+            }
+            const playerNameToScore = {};
+            myLobby.players.forEach((player) => {
+                playerNameToScore[player.playerName] = player.playerScore;
+            });
+
+            let winner = '';
+            let highestScore = -Infinity;
+
+            for (const [player, score] of Object.entries(playerNameToScore)) {
+                if (score > highestScore) {
+                    winner = player;
+                    highestScore = score;
+                }
+            }
+
+            localStorage.setItem("Winner", winner);
+
+            data["myScore"] = playerNameToScore[user.username];
+
+            delete playerNameToScore[user.username];
+
+            data["opponentScore"] = Object.values(playerNameToScore).reduce((acc, cur) => {
+                return acc + cur;
+            }, 0);
+
+            const opponentPlayers = Object.entries(playerNameToScore).map(([key, value]) => `${key}(${value})`).join(", ");
+            data["opponent"] = opponentPlayers;
+
+            const scores = Object.values(playerNameToScore);
+            scores.sort((a, b) => a - b);
+
+            scores.map((score) => {
+                if (data.myScore > score) {
+                    data.gameStatus = "Win";
+                }
+                else if (data.myScore === score) {
+                    data.gameStatus = "Draw";
+                }
+                else {
+                    data.gameStatus = "Lose";
+                }
+            });
+            addHistory(data);
             navigate("/dashboard/end");
         }
     }, [lines]);
@@ -86,7 +147,7 @@ const GameRoomMultiplayer = () => {
                     }
 
                     <div className="invite-link">
-                        <Link to="/end">
+                        <Link to="/dashboard/end">
                             <button className="end btn form-btn" >
                                 End!
                             </button>

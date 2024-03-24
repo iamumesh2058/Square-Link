@@ -48,12 +48,15 @@ const PlayGame = () => {
     const handleLobbyJoin = () => {
         if (lobbyId) {
             socket.emit("joinLobby", lobbyId, playerName);
+            socket.on("lobbyJoinedFail", ({ error }) => {
+                setError(error);
+            });
+            if(error !== ''){
+                toast.error(error);
+                navigate("/dashboard");
+                return;
+            }
         }
-        socket.on("lobbyJoinedFail", ({ error }) => {
-            setError(error);
-            toast.error(error);
-            navigate('/dashboard/playgame');
-        });
         toast.success("Lobby Joined");
         navigate('/dashboard/gamelobby/enter');
     }

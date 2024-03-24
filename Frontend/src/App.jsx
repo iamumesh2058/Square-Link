@@ -15,7 +15,8 @@ import {
 	GameRoom,
 	GameRoomMultiplayer,
 	GameLobby,
-	EndRoom
+	EndRoom,
+	HowToPlay
 } from './pages';
 
 import { action as registerAction } from './pages/Authentication/Register';
@@ -99,7 +100,11 @@ const router = createBrowserRouter([
 					}
 				]
 			}
-		]
+		],
+	},
+	{
+		path: '/howtoplay',
+		element: <HowToPlay />
 	}
 ])
 

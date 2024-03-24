@@ -17,7 +17,6 @@ const Navbar = () => {
                 </button>
                 <div>
                     <Logo />
-                    <h4 className='logo-text'>Square Link</h4>
                 </div>
                 <div className="btn-container">
                     <ThemeToggle />
