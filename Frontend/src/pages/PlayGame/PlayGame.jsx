@@ -18,6 +18,7 @@ const PlayGame = () => {
         gameMode, setGameMode,
     } = useDashboardContext();
 
+    
     useEffect(() => {
         localStorage.removeItem('gameBoard');
     }, []);

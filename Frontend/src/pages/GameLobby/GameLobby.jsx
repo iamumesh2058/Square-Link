@@ -14,8 +14,10 @@ const GameLobby = () => {
         playerName
     } = useDashboardContext();
 
+    console.log(lobbyId)
     
     const lobbyCode = `${lobbyId}`;
+    
     
     const path = useParams();
     useEffect(() => {

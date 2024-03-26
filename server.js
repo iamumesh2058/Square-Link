@@ -101,7 +101,7 @@ io.on('connection', (socket) => {
                 gameStarted: false,
                 playerTurn: [],
                 players: [],
-                availableColors: ["blue", "green", "red"],
+                availableColors: ["blue", "green", "red", "cyan"],
                 lines: [],
                 squares: [],
             };
@@ -139,7 +139,7 @@ io.on('connection', (socket) => {
                         socket.emit("lobbyJoined", playerId, playerColor);
                         io.to(lobbyId).emit('lobbyUpdated', lobbies[lobbyId]);
                     } else {
-                        socket.emit("lobbyJoinedFail", { error: "There are already three players in the lobby. You cannot enter." });
+                        socket.emit("lobbyJoinedFail", { error: "There are already four players in the lobby. You cannot enter." });
                     }
                 } else {
                     socket.emit("lobbyJoinedFail", { error: "You've already entered the lobby" });
@@ -186,7 +186,7 @@ io.on('connection', (socket) => {
 
         //if creator left lobby
         if (lobbies[socket.id]) {
-            io.to(socket.id).emit('lobbyJoinedFail', { error: "Creator of this lobby has left." });
+            io.to(socket.id).emit('lobbyJoinedFail', { errorCode: 5, error: "Creator of this lobby has left." });
             delete lobbies[socket.id];
         }
 
@@ -204,7 +204,7 @@ io.on('connection', (socket) => {
                 //End game if all players left the lobby
                 if (lobbies[lobbyId].players.length === 1 && lobbies[lobbyId].gameStarted) {
                     console.log(`Game ended in lobby "${lobbyId}"`);
-                    io.to(lobbyId).emit('lobbyJoinedFail', { error: "All players have left the lobby." });
+                    io.to(lobbyId).emit('lobbyJoinedFail', { errorCode: 6, error: "All players have left the lobby." });
                 }
             }
         });

@@ -97,14 +97,14 @@ const router = createBrowserRouter([
 						path: 'profile',
 						element: <Profile />,
 						action: profileAction
+					},
+					{
+						path: 'howtoplay',
+						element: <HowToPlay />,
 					}
 				]
 			}
 		],
-	},
-	{
-		path: '/howtoplay',
-		element: <HowToPlay />
 	}
 ])
 

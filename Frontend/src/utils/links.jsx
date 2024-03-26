@@ -4,6 +4,7 @@ import { IoGameControllerSharp } from "react-icons/io5";
 import { FaHistory } from "react-icons/fa";
 import { ImProfile } from 'react-icons/im';
 import { IoBarChartSharp } from 'react-icons/io5';
+import { MdPlayLesson } from "react-icons/md";
 
 const links = [
     {
@@ -26,6 +27,11 @@ const links = [
         path: 'profile',
         icon: <ImProfile />,
     },
+    {
+        text: "how to play",
+        path: "howtoplay",
+        icon: <MdPlayLesson />
+    }
 ]
 
 export default links;
