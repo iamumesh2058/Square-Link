@@ -14,8 +14,7 @@ const Wrapper = styled.section`
         margin: 0 3rem;
     }
     h3{
-        
-
+            
     }
 `;
 export default Wrapper;

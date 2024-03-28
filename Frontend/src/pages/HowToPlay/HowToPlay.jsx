@@ -39,7 +39,7 @@ const HowToPlay = () => {
           <iframe
             width="560"
             height="315"
-            src="https://www.youtube.com/embed/kyvr_f3shGI?autoplay=false"
+            src="https://www.youtube.com/embed/5Rgl2vQdcBM?si=-5ydxOjPrTJc3aDb?autoplay=false"
             title="YouTube video player"
             frameBorder="0"
             allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
